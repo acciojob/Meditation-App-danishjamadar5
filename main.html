@@ -1,4 +1,108 @@
+
 <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meditation App</title>
+    <style>
+        #app {
+            text-align: center;
+        }
+        .vid-container {
+            margin-top: 20px;
+        }
+        .player-container {
+            margin-top: 20px;
+        }
+        .sound-picker {
+            margin-top: 20px;
+        }
+        .time-display {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+        .play {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="vid-container">
+            <video id="video" width="640" height="360" controls autoplay loop>
+                <source src="video/beach.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <div class="player-container">
+            <audio id="audio" controls autoplay loop>
+                <source id="audio-source" src="Sounds/beach.mp3" type="audio/mpeg">
+                Your browser does not support the audio tag.
+            </audio>
+        </div>
+        <div class="sound-picker">
+            <button onclick="changeSound('beach')">Beach Sound</button>
+            <button onclick="changeSound('rain')">Rain Sound</button>
+        </div>
+        <div class="time-display" id="time-display">10:00</div>
+        <div class="time-select">
+            <button id="smaller-mins" onclick="setTime(2)">2 Min</button>
+            <button id="medium-mins" onclick="setTime(5)">5 Min</button>
+            <button id="long-mins" onclick="setTime(10)">10 Min</button>
+        </div>
+        <button class="play" onclick="togglePlay()">Play/Pause</button>
+    </div>
+
+    <script>
+        let timer;
+        let timeLeft = 10 * 60;
+
+        function togglePlay() {
+            const video = document.getElementById('video');
+            const audio = document.getElementById('audio');
+
+            if (video.paused) {
+                video.play();
+                audio.play();
+                timer = setInterval(updateTimer, 1000);
+            } else {
+                video.pause();
+                audio.pause();
+                clearInterval(timer);
+            }
+        }
+
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('time-display').textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+            if (timeLeft === 0) {
+                clearInterval(timer);
+            } else {
+                timeLeft--;
+            }
+        }
+
+        function setTime(minutes) {
+            timeLeft = minutes * 60;
+            updateTimer();
+        }
+
+        function changeSound(sound) {
+            const audioSource = document.getElementById('audio-source');
+            audioSource.src = `Sounds/${sound}.mp3`;
+            const audio = document.getElementById('audio');
+            audio.load();
+            audio.play();
+        }
+    </script>
+</body>
+</html>
+
+
+<!-- <!DOCTYPE html>
 
 <html>
 
@@ -14,3 +118,4 @@
 </body>
 
 </html>
+ -->
